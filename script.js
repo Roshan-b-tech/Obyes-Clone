@@ -1,43 +1,46 @@
 function gsapScrollTrigger() {
     gsap.registerPlugin(ScrollTrigger);
   
-    const locoScroll = new LocomotiveScroll({
-      el: document.querySelector("#wrapper"),
-      smooth: true,
-  
-      // for tablet smooth
-      tablet: { smooth: true },
-  
-      // for mobile
-      smartphone: { smooth: true },
-    });
-    locoScroll.on("scroll", ScrollTrigger.update);
-  
-    ScrollTrigger.scrollerProxy("#wrapper", {
-      scrollTop(value) {
-        return arguments.length
-          ? locoScroll.scrollTo(value, 0, 0)
-          : locoScroll.scroll.instance.scroll.y;
-      },
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-  
-      // follwoing line is not required to work pinning on touch screen
-  
-      /* pinType: document.querySelector("#wrapper").style.transform
-          ? "transform"
-          : "fixed"*/
-    });
+    const locoScroll = initLocomotiveScroll();
   
     ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
   
     ScrollTrigger.refresh();
+  }
+  
+  function initLocomotiveScroll() {
+    const locoScroll = new LocomotiveScroll({
+        el: document.querySelector("#wrapper"),
+        smooth: true,
+        multiplier: 0.8, // Adjust scroll speed (lower = smoother)
+        lerp: 0.08,      // Lower value = smoother scrolling
+        tablet: { smooth: true },
+        smartphone: { smooth: true }
+    });
+
+    // Update ScrollTrigger on scroll
+    locoScroll.on("scroll", ScrollTrigger.update);
+
+    // Sync ScrollTrigger with Locomotive Scroll
+    ScrollTrigger.scrollerProxy("#wrapper", {
+        scrollTop(value) {
+            return arguments.length ? locoScroll.scrollTo(value, 0, 0) : locoScroll.scroll.instance.scroll.y;
+        },
+        getBoundingClientRect() {
+            return {
+                top: 0,
+                left: 0,
+                width: window.innerWidth,
+                height: window.innerHeight
+            };
+        }
+    });
+
+    // Handle smooth refresh
+    ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
+    ScrollTrigger.refresh();
+
+    return locoScroll;
   }
   
   // gsapScrollTrigger();
@@ -245,4 +248,12 @@ function gsapScrollTrigger() {
   
   }
   videoContainerEffect();
-  flagAnimation()
+  flagAnimation();
+
+  function optimizeImages() {
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        img.loading = 'lazy';
+        img.decoding = 'async';
+    });
+  }
