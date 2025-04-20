@@ -75,12 +75,24 @@
     .heroContainer nav .menus{
         display: none;
     }
-    #videoSection{
+    #videoSection {
         height: 50vh;
+        justify-content: center;
     }
-    .videoContainer{
+    .videoContainer {
         height: 100%;
         width: 100%;
+        margin: 0 auto;
+    }
+    #videoCursor {
+        width: 15vw;
+        height: 15vw;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    #videoCursor i {
+        font-size: 4vw;
     }
     .heroContent h2{
         font-size: 12vw;
